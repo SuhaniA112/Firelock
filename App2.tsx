@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const socket = io("http://10.0.2.2:3001");
 
 function App() {
   const [arduinoData, setArduinoData] = useState("");

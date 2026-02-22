@@ -27,6 +27,6 @@ io.on("connection", (socket) => {
   console.log("React client connected");
 });
 
-server.listen(3001, () => {
+server.listen(3001, "0.0.0.0", () => {
   console.log("Server running on http://localhost:3001");
 });
