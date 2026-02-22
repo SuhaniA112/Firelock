@@ -31,10 +31,9 @@ export default function RunCard({ data }: { data: UserData }) {
     <View style={styles.runCard}>
       <View style={styles.runInfo}>
         <Text style={styles.runDistance}>{data.date}</Text>
+        <Text style={styles.runTime}>{minutes} minutes</Text>
         <Text style={styles.runTime}>{data.steps} steps</Text>
-        <Text style={styles.runTime}>
-          {data.avg_cadence} avg. Ground Contact Time
-        </Text>
+        <Text style={styles.runPace}>{data.avg_cadence} avg. GCT</Text>
       </View>
     </View>
   );
