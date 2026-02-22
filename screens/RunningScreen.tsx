@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import ArduinoClient from "../preprocessing/process_data";
 
 const { width, height } = Dimensions.get("window");
 
@@ -17,17 +18,18 @@ export default function RunningScreen({ navigation }: any) {
   const [isRunning, setIsRunning] = useState(true);
   const [pace, setPace] = useState(0);
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const [data, setData] = useState("");
+  const client = new ArduinoClient();
 
   useEffect(() => {
-    if (isRunning) {
-      // Put arduino code for pinging here
-      const interval = setInterval(() => {
-        setTime((prev) => prev + 1);
-        setDistance((prev) => prev + 0.015);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isRunning]);
+    const interval = setInterval(() => {
+      setTime((prev) => prev + 1);
+      setDistance((prev) => prev + 0.015);
+      setData(client.getLatestData());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (distance > 0) {
@@ -87,6 +89,7 @@ export default function RunningScreen({ navigation }: any) {
         >
           <Text style={styles.distanceValue}>{distance.toFixed(2)}</Text>
           <Text style={styles.distanceUnit}>Steps</Text>
+          <Text style={styles.distanceValue}>{data}</Text>
         </Animated.View>
 
         {/* Time */}
