@@ -25,7 +25,7 @@ const parser = port.pipe(
 );
 
 parser.on("data", (data) => {
-  console.log("Arduino says:", data);
+//   console.log("Arduino says:", data);
   io.emit("arduino-data", data);
 });
 
