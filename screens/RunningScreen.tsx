@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ArduinoClient from "../preprocessing/process_data";
+import { io } from "socket.io-client";
 
 const { width, height } = Dimensions.get("window");
 
@@ -19,7 +20,11 @@ export default function RunningScreen({ navigation }: any) {
   const [pace, setPace] = useState(0);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const [data, setData] = useState("");
+  const socket = io("http://10.0.2.2:3001", {
+    transports: ["websocket"],
+  });
   const client = new ArduinoClient();
+  const [arduinoData, setArduinoData] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,6 +32,16 @@ export default function RunningScreen({ navigation }: any) {
       setDistance((prev) => prev + 0.015);
       setData(client.getLatestData());
     }, 1000);
+
+    useEffect(() => {
+      socket.on("arduino-data", (data) => {
+        setArduinoData(data);
+      });
+
+      return () => {
+        socket.off("arduino-data");
+      };
+    }, []);
 
     return () => clearInterval(interval);
   }, []);
@@ -88,8 +103,8 @@ export default function RunningScreen({ navigation }: any) {
           ]}
         >
           <Text style={styles.distanceValue}>{distance.toFixed(2)}</Text>
-          <Text style={styles.distanceUnit}>Steps</Text>
-          <Text style={styles.distanceValue}>{data}</Text>
+          {/* <Text style={styles.distanceUnit}>Steps</Text> */}
+          <Text style={styles.distanceValue}>{arduinoData}</Text>
         </Animated.View>
 
         {/* Time */}
