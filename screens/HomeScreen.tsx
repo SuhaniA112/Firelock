@@ -9,12 +9,15 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import runData from "../data/user_data.json";
+import RunCard from "../componenets/past_runs";
 
 const { width } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }: any) {
-  const [totalDistance, setTotalDistance] = useState(42.5);
-  const [totalRuns, setTotalRuns] = useState(8);
+  const [totalTime, setTotalDistance] = useState(runData.total_time);
+  const [totalRuns, setTotalRuns] = useState(runData.runs);
+  const [pastRuns, setPastRuns] = useState(runData.past_user_data);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,8 +35,8 @@ export default function HomeScreen({ navigation }: any) {
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
             <Ionicons name="trending-up" size={24} color="#FF6B35" />
-            <Text style={styles.statValue}>{totalDistance}</Text>
-            <Text style={styles.statLabel}>Total km</Text>
+            <Text style={styles.statValue}>{Math.round(totalTime / 60)}</Text>
+            <Text style={styles.statLabel}>Minutes</Text>
           </View>
           <View style={styles.statCard}>
             <Ionicons name="checkmark-circle" size={24} color="#FF6B35" />
@@ -42,9 +45,9 @@ export default function HomeScreen({ navigation }: any) {
           </View>
         </View>
 
-        {/* Last Run */}
+        {/* Last Runs */}
         <View style={styles.recentSection}>
-          <Text style={styles.sectionTitle}>Last Run</Text>
+          {/* <Text style={styles.sectionTitle}>Last Runs</Text>
           <View style={styles.runCard}>
             <View style={styles.runInfo}>
               <Text style={styles.runDistance}>5.2 km</Text>
@@ -55,7 +58,8 @@ export default function HomeScreen({ navigation }: any) {
               <Ionicons name="calendar" size={16} color="#999" />
               <Text style={styles.runDate}>Today</Text>
             </View>
-          </View>
+          </View> */}
+          <RunCard data={pastRuns[0]} />
         </View>
 
         {/* Start Run Button */}
