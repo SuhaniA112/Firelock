@@ -29,8 +29,12 @@ parser.on("data", (data) => {
   io.emit("arduino-data", data);
 });
 
-io.on("connection", () => {
-  console.log("React client connected");
+io.on("connection", (socket) => {
+  console.log("Client connected");
+
+  socket.on("buttonPress", (data) => {
+    console.log("Button pressed!", data);
+  });
 });
 
 server.listen(3001, "0.0.0.0", () => {
