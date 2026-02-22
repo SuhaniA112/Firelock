@@ -8,10 +8,16 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import ArduinoClient from "../preprocessing/process_data";
 import { io } from "socket.io-client";
+import RNFS from "react-native-fs";
 
 const { width, height } = Dimensions.get("window");
+
+type Metrics = {
+  steps: number;
+  gct: number;
+  accel: number;
+};
 
 export default function RunningScreen({ navigation }: any) {
   const [time, setTime] = useState(0);
@@ -19,31 +25,47 @@ export default function RunningScreen({ navigation }: any) {
   const [isRunning, setIsRunning] = useState(true);
   const [pace, setPace] = useState(0);
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const [data, setData] = useState("");
   const socket = io("http://10.0.2.2:3001", {
     transports: ["websocket"],
   });
-  const client = new ArduinoClient();
-  const [arduinoData, setArduinoData] = useState("");
+  const [arduinoData, setArduinoData] = useState({
+    steps: 0,
+    gct: 0,
+    accel: 0,
+  });
+  const totalSteps = useRef(0);
+  const totalGCT = useRef(0);
+  const totalAccel = useRef(0);
+
+  function parseMetrics(input: string): Metrics {
+    const stepsMatch = input.match(/Steps:\s*(\d+)/);
+    const gctMatch = input.match(/GCT\(ms\):\s*([\d.]+)/);
+    const accelMatch = input.match(/Accel:\s*([\d.]+)/);
+
+    return {
+      steps: stepsMatch ? parseInt(stepsMatch[1], 10) : 0,
+      gct: gctMatch ? parseFloat(gctMatch[1]) : 0,
+      accel: accelMatch ? parseFloat(accelMatch[1]) : 0,
+    };
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTime((prev) => prev + 1);
       setDistance((prev) => prev + 0.015);
-      setData(client.getLatestData());
     }, 1000);
 
-    useEffect(() => {
-      socket.on("arduino-data", (data) => {
-        setArduinoData(data);
-      });
+    socket.on("arduino-data", (arduinoData) => {
+      setArduinoData(arduinoData);
+      totalAccel.current += arduinoData.accel;
+      totalSteps.current += arduinoData.steps;
+      totalGCT.current += arduinoData.gct;
+    });
 
-      return () => {
-        socket.off("arduino-data");
-      };
-    }, []);
-
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      socket.off("arduino-data");
+    };
   }, []);
 
   useEffect(() => {
@@ -83,9 +105,9 @@ export default function RunningScreen({ navigation }: any) {
     setIsRunning(false);
     navigation.navigate("Summary", {
       time: formatTime(time),
-      distance: distance.toFixed(2),
-      pace: pace.toFixed(2),
-      calories: Math.round(distance * 60),
+      distance: (totalSteps.current / time).toFixed(0),
+      cadence: (totalAccel.current / time).toFixed(2),
+      gct: (totalGCT.current / time).toFixed(2),
     });
   };
 
@@ -102,9 +124,8 @@ export default function RunningScreen({ navigation }: any) {
             },
           ]}
         >
-          <Text style={styles.distanceValue}>{distance.toFixed(2)}</Text>
-          {/* <Text style={styles.distanceUnit}>Steps</Text> */}
-          <Text style={styles.distanceValue}>{arduinoData}</Text>
+          <Text style={styles.distanceValue}>{arduinoData.steps}</Text>
+          <Text style={styles.distanceUnit}>Steps</Text>
         </Animated.View>
 
         {/* Time */}
@@ -118,12 +139,12 @@ export default function RunningScreen({ navigation }: any) {
       <View style={styles.statsGrid}>
         <View style={styles.statBox}>
           <Ionicons name="pulse-outline" size={24} color="#FF6B35" />
-          <Text style={styles.statBoxValue}>{pace.toFixed(2)}</Text>
+          <Text style={styles.statBoxValue}>{arduinoData.gct}</Text>
           <Text style={styles.statBoxLabel}>GCT</Text>
         </View>
         <View style={styles.statBox}>
           <Ionicons name="walk-outline" size={24} color="#FF6B35" />
-          <Text style={styles.statBoxValue}>{Math.round(distance * 60)}</Text>
+          <Text style={styles.statBoxValue}>{arduinoData.accel}</Text>
           <Text style={styles.statBoxLabel}>Cadence</Text>
         </View>
       </View>
