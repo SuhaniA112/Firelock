@@ -25,18 +25,26 @@ export default function RunningScreen({ navigation }: any) {
   const [pace, setPace] = useState(0);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const [a, setA] = useState("");
-  const socket = io("http://10.0.2.2:3001", {
+  const socket = useRef(io("http://10.0.2.2:3001", {
     transports: ["websocket"],
-  });
+  })).current;
   const [arduinoData, setArduinoData] = useState({
     steps: 0,
     gct: 0,
     cadence: 0,
   });
-  const totalSteps = useRef(0);
-  const totalGCT = useRef(0);
-  const totalCadence = useRef(0);
+  const [totalSteps, setTotalSteps] = useState(0);
+  const [totalGCT, setTotalGCT] = useState(0);
+  const [totalCadence, setTotalCadence] = useState(0);
+  const[isStarting, setisStarting] = useState(true);
 
+  // useEffect(() => {
+  //   if(isStarting) {
+  //     socket.emit("buttonPress");
+  //     setisStarting(false);
+  //   }
+  // })
+  
   function parseMetrics(input: string): Metrics {
     const stepsMatch = input.match(/\s*Steps:\s*(\d+)/);
     const gctMatch = input.match(/GCT\(ms\):\s*([\d.]+)/);
@@ -59,9 +67,9 @@ export default function RunningScreen({ navigation }: any) {
       console.log("raw data", raw, typeof raw)
       const parsed = parseMetrics(raw);
       setArduinoData(parsed);
-      totalCadence.current += parsed.cadence;
-      totalSteps.current += parsed.steps;
-      totalGCT.current += parsed.gct;
+      setTotalCadence(prev => prev + parsed.cadence);
+      setTotalSteps(prev => prev + parsed.steps)
+      setTotalGCT(prev => prev + parsed.gct)
       setA(raw);
     });
 
@@ -108,9 +116,9 @@ export default function RunningScreen({ navigation }: any) {
     setIsRunning(false);
     navigation.navigate("Summary", {
       time: formatTime(time),
-      distance: (totalSteps.current / time).toFixed(0),
-      cadence: (totalCadence.current / time).toFixed(2),
-      gct: (totalGCT.current / time).toFixed(2),
+      distance: (totalSteps / time).toFixed(0),
+      cadence: (totalCadence / time).toFixed(2),
+      gct: (totalGCT / time).toFixed(2),
     });
   };
 

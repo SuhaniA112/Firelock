@@ -85,7 +85,9 @@ export default function StartRunScreen({ navigation }: any) {
       {/* Begin Button */}
       <TouchableOpacity
         style={styles.beginButton}
-        onPress={() => navigation.navigate("Running")}
+        onPress={() => {
+          navigation.navigate("Running");
+        }}
         activeOpacity={0.8}
       >
         <Ionicons name="play-circle" size={28} color="#fff" />

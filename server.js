@@ -34,8 +34,9 @@ io.on("connection", (socket) => {
 
   socket.on("buttonPress", (data) => {
     console.log("Button pressed!", data);
-  });
-});
+    setTimeout(()=> {port.write('go\n')});
+    }, 2000);
+})
 
 server.listen(3001, "0.0.0.0", () => {
   console.log("Server running on port 3001");
