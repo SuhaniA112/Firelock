@@ -25,9 +25,11 @@ export default function RunningScreen({ navigation }: any) {
   const [pace, setPace] = useState(0);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const [a, setA] = useState("");
-  const socket = useRef(io("http://10.0.2.2:3001", {
-    transports: ["websocket"],
-  })).current;
+  const socket = useRef(
+    io("http://10.0.2.2:3001", {
+      transports: ["websocket"],
+    }),
+  ).current;
   const [arduinoData, setArduinoData] = useState({
     steps: 0,
     gct: 0,
@@ -36,7 +38,8 @@ export default function RunningScreen({ navigation }: any) {
   const [totalSteps, setTotalSteps] = useState(0);
   const [totalGCT, setTotalGCT] = useState(0);
   const [totalCadence, setTotalCadence] = useState(0);
-  const[isStarting, setisStarting] = useState(true);
+  const [isStarting, setisStarting] = useState(true);
+  const [count, setCount] = useState(0);
 
   // useEffect(() => {
   //   if(isStarting) {
@@ -44,7 +47,7 @@ export default function RunningScreen({ navigation }: any) {
   //     setisStarting(false);
   //   }
   // })
-  
+
   function parseMetrics(input: string): Metrics {
     const stepsMatch = input.match(/\s*Steps:\s*(\d+)/);
     const gctMatch = input.match(/GCT\(ms\):\s*([\d.]+)/);
@@ -64,13 +67,13 @@ export default function RunningScreen({ navigation }: any) {
     }, 1000);
 
     socket.on("arduino-data", (raw) => {
-      console.log("raw data", raw, typeof raw)
+      console.log("raw data", raw, typeof raw);
       const parsed = parseMetrics(raw);
       setArduinoData(parsed);
-      setTotalCadence(prev => prev + parsed.cadence);
-      setTotalSteps(prev => prev + parsed.steps)
-      setTotalGCT(prev => prev + parsed.gct)
-      setA(raw);
+      setTotalCadence((prev) => prev + parsed.cadence);
+      setTotalSteps((prev) => prev + parsed.steps);
+      setTotalGCT((prev) => prev + parsed.gct);
+      setCount((prev) => prev + 1);
     });
 
     return () => {
@@ -116,9 +119,9 @@ export default function RunningScreen({ navigation }: any) {
     setIsRunning(false);
     navigation.navigate("Summary", {
       time: formatTime(time),
-      distance: (totalSteps / time).toFixed(0),
-      cadence: (totalCadence / time).toFixed(2),
-      gct: (totalGCT / time).toFixed(2),
+      steps: totalSteps,
+      cadence: (totalCadence / count).toFixed(2),
+      gct: (totalGCT / count).toFixed(2),
     });
   };
 
