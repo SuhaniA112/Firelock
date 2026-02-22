@@ -25,14 +25,17 @@ export default function StartRunScreen({ navigation }: any) {
         <View style={{ width: 28 }} />
       </View>
 
-      {/* Motivational Message */}
       <View
         style={[
           styles.motivationCard,
-          { alignItems: "center", justifyContent: "center" },
+          {
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 100,
+          },
         ]}
       >
-        <Ionicons name="flame" size={32} color="#FF6B35" />
         <Text style={styles.motivationText}>Time to crush your goals!</Text>
       </View>
 
@@ -117,15 +120,20 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     backgroundColor: "#FF6B35",
     borderRadius: 16,
-    padding: 20,
+    height: 120,
+    paddingHorizontal: 20,
     alignItems: "center",
+    justifyContent: "center",
     alignSelf: "center",
+    gap: 10,
   },
   motivationText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
-    marginTop: 12,
+    textAlign: "center",
+    marginTop: 0,
+    marginBottom: 0,
   },
   section: {
     paddingHorizontal: 20,
