@@ -13,7 +13,7 @@ const io = new Server(server, {
 
 const port = new SerialPort({
   path: "COM4",
-  baudRate: 9600,
+  baudRate: 115200,
 });
 
 port.on("error", (err) => {
@@ -30,7 +30,7 @@ parser.on("data", (data) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("Client connected");
+//   console.log("Client connected");
 
   socket.on("buttonPress", (data) => {
     console.log("Button pressed!", data);
