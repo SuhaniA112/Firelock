@@ -5,21 +5,22 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:3001");
 
 function App() {
-  const [arduinoData, setArduinoData] = useState("10");
+  const [arduinoData, setArduinoData] = useState("");
 
-  //   useEffect(() => {
-  //     socket.on("arduino-data", (data) => {
-  //       setArduinoData(data);
-  //     });
+    useEffect(() => {
+      socket.on("arduino-data", (data) => {
+        setArduinoData(data);
+      });
 
-  //     return () => {
-  //       socket.off("arduino-data");
-  //     };
-  //   }, []);
+      return () => {
+        socket.off("arduino-data");
+      };
+    }, []);
 
   return (
     <View>
       <Text> {arduinoData}</Text>
+      <Text> Morning guys </Text>
     </View>
   );
 }
