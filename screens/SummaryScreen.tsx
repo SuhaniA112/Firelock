@@ -69,7 +69,7 @@ export default function SummaryScreen({ navigation, route }: any) {
       >
         <View style={styles.statsRow}>
           <View style={styles.statColumn}>
-            <Text style={styles.statLabel}>Avg Steps</Text>
+            <Text style={styles.statLabel}>Steps</Text>
             <Text style={styles.statValueLarge}>{steps}</Text>
             <Text style={styles.statUnit}>steps</Text>
           </View>
@@ -96,7 +96,7 @@ export default function SummaryScreen({ navigation, route }: any) {
         <View style={styles.statBox}>
           <View style={styles.statBoxHeader}>
             <Ionicons name="walk-outline" size={20} color="#FF6B35" />
-            <Text style={styles.statBoxLabel}>GCT</Text>
+            <Text style={styles.statBoxLabel}>Avg GCT</Text>
           </View>
           <Text style={styles.statBoxValue}>{gct}</Text>
           <Text style={styles.statBoxUnit}>ms</Text>

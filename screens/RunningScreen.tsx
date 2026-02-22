@@ -41,12 +41,12 @@ export default function RunningScreen({ navigation }: any) {
   const [isStarting, setisStarting] = useState(true);
   const [count, setCount] = useState(0);
 
-  // useEffect(() => {
-  //   if(isStarting) {
-  //     socket.emit("buttonPress");
-  //     setisStarting(false);
-  //   }
-  // })
+  useEffect(() => {
+    if(isStarting) {
+      socket.emit("buttonPress");
+      setisStarting(false);
+    }
+  })
 
   function parseMetrics(input: string): Metrics {
     const stepsMatch = input.match(/\s*Steps:\s*(\d+)/);
@@ -71,7 +71,7 @@ export default function RunningScreen({ navigation }: any) {
       const parsed = parseMetrics(raw);
       setArduinoData(parsed);
       setTotalCadence((prev) => prev + parsed.cadence);
-      setTotalSteps((prev) => prev + parsed.steps);
+      setTotalSteps(parsed.steps);
       setTotalGCT((prev) => prev + parsed.gct);
       setCount((prev) => prev + 1);
     });
