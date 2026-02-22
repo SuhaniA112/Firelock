@@ -72,28 +72,6 @@ export default function HomeScreen({ navigation }: any) {
           <Text style={styles.startButtonText}>Start New Run</Text>
         </TouchableOpacity>
 
-        {/* Weekly Overview */}
-        <View style={styles.weekSection}>
-          <Text style={styles.sectionTitle}>Week Overview</Text>
-          <View style={styles.weekChart}>
-            {[3.2, 5.2, 4.1, 0, 6.5, 3.8, 4.2].map((distance, index) => (
-              <View key={index} style={styles.dayBar}>
-                <View
-                  style={[
-                    styles.bar,
-                    {
-                      height: (distance / 6.5) * 60 || 4,
-                      opacity: distance > 0 ? 1 : 0.3,
-                    },
-                  ]}
-                />
-                <Text style={styles.dayLabel}>
-                  {["M", "T", "W", "T", "F", "S", "S"][index]}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </View>
 
         <View style={styles.bottomPadding} />
       </ScrollView>
