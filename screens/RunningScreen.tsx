@@ -20,6 +20,7 @@ export default function RunningScreen({ navigation }: any) {
 
   useEffect(() => {
     if (isRunning) {
+      // Put arduino code for pinging here
       const interval = setInterval(() => {
         setTime((prev) => prev + 1);
         setDistance((prev) => prev + 0.015);
@@ -73,18 +74,6 @@ export default function RunningScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <View style={styles.statusItem}>
-          <Ionicons name="battery-full" size={20} color="#FF6B35" />
-          <Text style={styles.statusText}>100%</Text>
-        </View>
-        <View style={styles.statusItem}>
-          <Ionicons name="location" size={20} color="#FF6B35" />
-          <Text style={styles.statusText}>Tracking</Text>
-        </View>
-      </View>
-
       {/* Main Display */}
       <View style={styles.display}>
         {/* Distance Circle */}
@@ -97,7 +86,7 @@ export default function RunningScreen({ navigation }: any) {
           ]}
         >
           <Text style={styles.distanceValue}>{distance.toFixed(2)}</Text>
-          <Text style={styles.distanceUnit}>km</Text>
+          <Text style={styles.distanceUnit}>Steps</Text>
         </Animated.View>
 
         {/* Time */}
@@ -110,31 +99,19 @@ export default function RunningScreen({ navigation }: any) {
       {/* Stats Grid */}
       <View style={styles.statsGrid}>
         <View style={styles.statBox}>
-          <Ionicons name="speedometer" size={24} color="#FF6B35" />
+          <Ionicons name="pulse-outline" size={24} color="#FF6B35" />
           <Text style={styles.statBoxValue}>{pace.toFixed(2)}</Text>
-          <Text style={styles.statBoxLabel}>min/km</Text>
+          <Text style={styles.statBoxLabel}>GCT</Text>
         </View>
         <View style={styles.statBox}>
-          <Ionicons name="flame" size={24} color="#FF6B35" />
+          <Ionicons name="walk-outline" size={24} color="#FF6B35" />
           <Text style={styles.statBoxValue}>{Math.round(distance * 60)}</Text>
-          <Text style={styles.statBoxLabel}>cal</Text>
+          <Text style={styles.statBoxLabel}>Cadence</Text>
         </View>
       </View>
 
       {/* Controls */}
       <View style={styles.controls}>
-        <TouchableOpacity
-          style={[styles.controlButton, styles.pauseButton]}
-          onPress={() => setIsRunning(!isRunning)}
-          activeOpacity={0.8}
-        >
-          <Ionicons
-            name={isRunning ? "pause" : "play"}
-            size={32}
-            color="#fff"
-          />
-        </TouchableOpacity>
-
         <TouchableOpacity
           style={[styles.controlButton, styles.stopButton]}
           onPress={handleFinish}

@@ -10,11 +10,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 export default function SummaryScreen({ navigation, route }: any) {
-  const { time, distance, pace, calories } = route.params || {
+  const { time, steps, cadence, gct } = route.params || {
     time: "28:45",
-    distance: "5.2",
-    pace: "5.54",
-    calories: "320",
+    steps: "5.2",
+    cadence: "5.54",
+    gct: "320",
   };
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -36,7 +36,7 @@ export default function SummaryScreen({ navigation, route }: any) {
   }, []);
 
   const averageSpeed = (
-    parseFloat(distance) /
+    parseFloat(steps) /
     (parseInt(time.split(":")[0]) || 0 + parseInt(time.split(":")[1]) / 60)
   ).toFixed(2);
 
@@ -69,9 +69,9 @@ export default function SummaryScreen({ navigation, route }: any) {
       >
         <View style={styles.statsRow}>
           <View style={styles.statColumn}>
-            <Text style={styles.statLabel}>Distance</Text>
-            <Text style={styles.statValueLarge}>{distance}</Text>
-            <Text style={styles.statUnit}>km</Text>
+            <Text style={styles.statLabel}>Avg Steps</Text>
+            <Text style={styles.statValueLarge}>{steps}</Text>
+            <Text style={styles.statUnit}>steps</Text>
           </View>
           <View style={styles.divider} />
           <View style={styles.statColumn}>
@@ -86,50 +86,20 @@ export default function SummaryScreen({ navigation, route }: any) {
       <View style={styles.secondaryStats}>
         <View style={styles.statBox}>
           <View style={styles.statBoxHeader}>
-            <Ionicons name="speedometer" size={20} color="#FF6B35" />
-            <Text style={styles.statBoxLabel}>Avg Pace</Text>
+            <Ionicons name="pulse-outline" size={20} color="#FF6B35" />
+            <Text style={styles.statBoxLabel}>Avg Cadence</Text>
           </View>
-          <Text style={styles.statBoxValue}>{pace}</Text>
-          <Text style={styles.statBoxUnit}>min/km</Text>
+          <Text style={styles.statBoxValue}>{cadence}</Text>
+          <Text style={styles.statBoxUnit}>RPM </Text>
         </View>
 
         <View style={styles.statBox}>
           <View style={styles.statBoxHeader}>
-            <Ionicons name="flame" size={20} color="#FF6B35" />
-            <Text style={styles.statBoxLabel}>Calories</Text>
+            <Ionicons name="walk-outline" size={20} color="#FF6B35" />
+            <Text style={styles.statBoxLabel}>GCT</Text>
           </View>
-          <Text style={styles.statBoxValue}>{calories}</Text>
-          <Text style={styles.statBoxUnit}>kcal</Text>
-        </View>
-
-        <View style={styles.statBox}>
-          <View style={styles.statBoxHeader}>
-            <Ionicons name="trending-up" size={20} color="#FF6B35" />
-            <Text style={styles.statBoxLabel}>Avg Speed</Text>
-          </View>
-          <Text style={styles.statBoxValue}>{averageSpeed}</Text>
-          <Text style={styles.statBoxUnit}>km/h</Text>
-        </View>
-
-        <View style={styles.statBox}>
-          <View style={styles.statBoxHeader}>
-            <Ionicons name="checkmark" size={20} color="#FF6B35" />
-            <Text style={styles.statBoxLabel}>Streak</Text>
-          </View>
-          <Text style={styles.statBoxValue}>8</Text>
-          <Text style={styles.statBoxUnit}>days</Text>
-        </View>
-      </View>
-
-      {/* Achievement Badge */}
-      <View style={styles.achievementSection}>
-        <Text style={styles.sectionTitle}>Achievement Unlocked</Text>
-        <View style={styles.badgeCard}>
-          <Ionicons name="trophy" size={40} color="#FFD700" />
-          <View style={styles.badgeContent}>
-            <Text style={styles.badgeTitle}>5K Runner</Text>
-            <Text style={styles.badgeDesc}>Completed your first 5km run</Text>
-          </View>
+          <Text style={styles.statBoxValue}>{gct}</Text>
+          <Text style={styles.statBoxUnit}>ms</Text>
         </View>
       </View>
 

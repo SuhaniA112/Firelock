@@ -45,23 +45,6 @@ export default function HomeScreen({ navigation }: any) {
           </View>
         </View>
 
-        {/* Last Runs */}
-        <View style={styles.recentSection}>
-          {/* <Text style={styles.sectionTitle}>Last Runs</Text>
-          <View style={styles.runCard}>
-            <View style={styles.runInfo}>
-              <Text style={styles.runDistance}>5.2 km</Text>
-              <Text style={styles.runTime}>28 minutes</Text>
-              <Text style={styles.runPace}>5:23 min/km</Text>
-            </View>
-            <View style={styles.runMeta}>
-              <Ionicons name="calendar" size={16} color="#999" />
-              <Text style={styles.runDate}>Today</Text>
-            </View>
-          </View> */}
-          <RunCard data={pastRuns[0]} />
-        </View>
-
         {/* Start Run Button */}
         <TouchableOpacity
           style={styles.startButton}
@@ -72,28 +55,17 @@ export default function HomeScreen({ navigation }: any) {
           <Text style={styles.startButtonText}>Start New Run</Text>
         </TouchableOpacity>
 
-        {/* Weekly Overview */}
-        <View style={styles.weekSection}>
-          <Text style={styles.sectionTitle}>Week Overview</Text>
-          <View style={styles.weekChart}>
-            {[3.2, 5.2, 4.1, 0, 6.5, 3.8, 4.2].map((distance, index) => (
-              <View key={index} style={styles.dayBar}>
-                <View
-                  style={[
-                    styles.bar,
-                    {
-                      height: (distance / 6.5) * 60 || 4,
-                      opacity: distance > 0 ? 1 : 0.3,
-                    },
-                  ]}
-                />
-                <Text style={styles.dayLabel}>
-                  {["M", "T", "W", "T", "F", "S", "S"][index]}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </View>
+        {/* Last Runs */}
+        <ScrollView
+          style={styles.recentSection}
+          contentContainerStyle={{ padding: 16, gap: 12 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.subtitle}>Past Runs</Text>
+          {pastRuns.reverse().map((run, index) => (
+            <RunCard key={run.date} data={run} />
+          ))}
+        </ScrollView>
 
         <View style={styles.bottomPadding} />
       </ScrollView>

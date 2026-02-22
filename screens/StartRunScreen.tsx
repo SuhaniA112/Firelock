@@ -25,82 +25,18 @@ export default function StartRunScreen({ navigation }: any) {
         <View style={{ width: 28 }} />
       </View>
 
-      {/* Motivational Message */}
-      <View style={styles.motivationCard}>
-        <Ionicons name="flame" size={32} color="#FF6B35" />
+      <View
+        style={[
+          styles.motivationCard,
+          {
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 100,
+          },
+        ]}
+      >
         <Text style={styles.motivationText}>Time to crush your goals!</Text>
-      </View>
-
-      {/* Run Type Selection */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Run Type</Text>
-        <View style={styles.typeContainer}>
-          <TouchableOpacity
-            style={[
-              styles.typeButton,
-              runType === "free" && styles.typeButtonActive,
-            ]}
-            onPress={() => setRunType("free")}
-          >
-            <Ionicons
-              name="infinite"
-              size={24}
-              color={runType === "free" ? "#FF6B35" : "#999"}
-            />
-            <Text
-              style={[
-                styles.typeLabel,
-                runType === "free" && styles.typeActive,
-              ]}
-            >
-              Free Run
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.typeButton,
-              runType === "distance" && styles.typeButtonActive,
-            ]}
-            onPress={() => setRunType("distance")}
-          >
-            <Ionicons
-              name="map"
-              size={24}
-              color={runType === "distance" ? "#FF6B35" : "#999"}
-            />
-            <Text
-              style={[
-                styles.typeLabel,
-                runType === "distance" && styles.typeActive,
-              ]}
-            >
-              Distance Goal
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.typeButton,
-              runType === "time" && styles.typeButtonActive,
-            ]}
-            onPress={() => setRunType("time")}
-          >
-            <Ionicons
-              name="stopwatch"
-              size={24}
-              color={runType === "time" ? "#FF6B35" : "#999"}
-            />
-            <Text
-              style={[
-                styles.typeLabel,
-                runType === "time" && styles.typeActive,
-              ]}
-            >
-              Time Goal
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
 
       {/* Distance Goal Input */}
@@ -184,14 +120,20 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     backgroundColor: "#FF6B35",
     borderRadius: 16,
-    padding: 20,
+    height: 120,
+    paddingHorizontal: 20,
     alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    gap: 10,
   },
   motivationText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
-    marginTop: 12,
+    textAlign: "center",
+    marginTop: 0,
+    marginBottom: 0,
   },
   section: {
     paddingHorizontal: 20,
